@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  /* VeloQube color system: deep navy + electric blue. Matches the desktop POS
+     (Block 11 Cafe/Views/Styles/Colors.xaml). The token names (ink, paper, accent...)
+     are kept so every component keeps working; only the values are re-themed. */
+  --color-ink: #0f1a2e;
+  --color-ink-soft: #475569;
+  --color-paper: #f5f7fb;
+  --color-surface: #ffffff;
+  --color-line: #dce3ee;
+  --color-accent: #1d4ed8;
+  --color-accent-soft: #e0f2fe;
+  --color-alert: #dc2626;
+  --color-alert-soft: #fee2e2;
+
+  --font-display: "Inter", -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Inter", -apple-system, "Segoe UI", sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Headings and big numbers use the same face as body text, so give them a bit
+   more weight and tighter tracking instead of a second typeface. */
+.font-display {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Aligns digits in the stock/cost/valuation columns so the table reads
+   cleanly, without reaching for a full monospace face. */
+.tabular-figures {
+  font-variant-numeric: tabular-nums;
+}

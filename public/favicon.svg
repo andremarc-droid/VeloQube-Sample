@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Deep navy rounded square matching the app header -->
+  <rect width="512" height="512" rx="80" fill="#0F1A2E"/>
+
+  <!-- Isometric cube: top, left, right faces -->
+  <polygon points="256,72 416,164 256,256 96,164" fill="#38BDF8"/>
+  <polygon points="96,164 256,256 256,440 96,348" fill="#1D4ED8"/>
+  <polygon points="416,164 416,348 256,440 256,256" fill="#2563EB"/>
+</svg>

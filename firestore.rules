@@ -1,0 +1,52 @@
+rules_version = '2';
+
+// VeloQube Sample -- Firestore rules shared by the desktop POS and the web inventory app.
+//
+// Both apps sign in to Firebase with an Email/Password account (the desktop signs in as a
+// fixed demo user; the web app signs in as a person). This is a pitch prototype, so any
+// signed-in account may read and write the collections below. Do NOT reuse these rules for
+// a real store: there, restrict `users` (it holds PIN hashes) and add per-role checks.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Inventory. The web app also validates the numbers it writes.
+    match /rawMaterials/{materialId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated()
+        && (!('stockQty' in request.resource.data)
+            || (request.resource.data.stockQty is number && request.resource.data.stockQty >= 0))
+        && (!('costPerUnit' in request.resource.data)
+            || (request.resource.data.costPerUnit is number && request.resource.data.costPerUnit >= 0));
+      allow delete: if isAuthenticated();
+    }
+
+    // Audit trail of stock changes: append-only.
+    match /stockMovements/{movementId} {
+      allow read, create: if isAuthenticated();
+      allow update, delete: if false;
+    }
+
+    // ID counters used by both apps to hand out integer IDs.
+    match /counters/{counterId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Collections used by the desktop POS.
+    match /users/{id}          { allow read, write: if isAuthenticated(); }
+    match /categories/{id}     { allow read, write: if isAuthenticated(); }
+    match /menuItems/{id}      { allow read, write: if isAuthenticated(); }
+    match /products/{id}       { allow read, write: if isAuthenticated(); }
+    match /orders/{id}         { allow read, write: if isAuthenticated(); }
+    match /activityLogs/{id}   { allow read, write: if isAuthenticated(); }
+    match /meta/{id}           { allow read, write: if isAuthenticated(); }
+
+    // Everything else is denied.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
